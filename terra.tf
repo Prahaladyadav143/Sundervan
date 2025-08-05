@@ -16,7 +16,11 @@ resource "azurerm_resource_group" "madhuvan" {
   name     = "ramu-rg"
   location = "West Europe"
 
+  
 }
-# jgjhghjghj
-# shjhahs
-# hjsgghkd
+resource "azurerm_resource_group" "madhuvan11" {
+  name     = "ramu-rg11"
+  location = "West Europe"
+
+  
+}
