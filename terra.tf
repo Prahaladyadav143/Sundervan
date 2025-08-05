@@ -24,3 +24,9 @@ resource "azurerm_resource_group" "madhuvan11" {
 
   
 }
+resource "azurerm_resource_group" "madhuvan12" {
+  name     = "ramu-rg123"
+  location = "West Europe"
+
+  
+}
