@@ -30,3 +30,9 @@ resource "azurerm_resource_group" "madhuvan12" {
 
   
 }
+resource "azurerm_resource_group" "madhuvan123" {
+  name     = "ramu-rg1234"
+  location = "West Europe"
+
+  
+} 
