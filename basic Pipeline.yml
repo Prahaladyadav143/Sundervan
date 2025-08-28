@@ -2,6 +2,8 @@ name: basic Pipeline
 trigger: none
 pool:
  name: 21-aug
+variables:
+  envir: 'newservice1'
 stages:
   - stage: Build
     displayName: Build infra
@@ -18,7 +20,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            backendServiceArm: 'newservice1'
+            backendServiceArm: '$(envir)'
             backendAzureRmStorageAccountName: 'prah'
             backendAzureRmContainerName: 'prah1'
             backendAzureRmKey: 'prah.tfstate'
@@ -34,12 +36,20 @@ stages:
             command: 'custom'
             outputTo: 'console'
             customCommand: 'fmt'
-            environmentServiceNameAzureRM: 'newservice1'
+            environmentServiceNameAzureRM: '$(envir)'
       - job: plan
         displayName: planwa
         steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: '$(envir)'
+            backendAzureRmStorageAccountName: 'prah'
+            backendAzureRmContainerName: 'prah1'
+            backendAzureRmKey: 'prah.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
             command: 'plan'
-            environmentServiceNameAzureRM: 'newservice1'
+            environmentServiceNameAzureRM: '$(envir)'
