@@ -9,10 +9,12 @@ parameters:
     displayName: init run ?
     type: boolean
     default: false
+
   - name: runvalidate
     displayName: validate run ?
     type: boolean
     default: false
+
   - name: runfmt
     displayName: fmt run ?
     type: boolean
