@@ -35,3 +35,11 @@ stages:
             outputTo: 'console'
             customCommand: 'fmt'
             environmentServiceNameAzureRM: 'newservice1'
+      - job: plan
+        displayName: planwa
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'newservice1'
