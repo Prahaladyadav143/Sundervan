@@ -1,0 +1,29 @@
+name: basic Pipeline
+trigger: none
+pool:
+ name: 21-aug
+stages:
+  - stage: Build
+    displayName: Build infra
+    jobs:
+      - job: initvalidatejob
+        displayName: initwa validatwa job
+        steps:
+        - task: TerraformInstaller@1
+          displayName: installer
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          displayName: init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'newservice1'
+            backendAzureRmStorageAccountName: 'prah'
+            backendAzureRmContainerName: 'prah1'
+            backendAzureRmKey: 'prah.tfstate'
+        - task: TerraformTask@5
+          displayName: validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
