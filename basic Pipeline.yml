@@ -27,3 +27,11 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
+        - task: TerraformTask@5
+          displayName: formatting
+          inputs:
+            provider: 'azurerm'
+            command: 'custom'
+            outputTo: 'console'
+            customCommand: 'fmt'
+            environmentServiceNameAzureRM: 'newservice1'
