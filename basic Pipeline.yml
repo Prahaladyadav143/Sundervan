@@ -4,6 +4,11 @@ pool:
  name: 21-aug
 variables:
   envir: 'newservice1'
+parameters:
+  - name: runinit
+    displayName: init run ?
+    type: boolean
+    default: false
 stages:
   - stage: Build
     displayName: Build infra
@@ -15,6 +20,7 @@ stages:
           displayName: installer
           inputs:
             terraformVersion: 'latest'
+      - ${{ if eq(parameters.runinit, true) }}:
         - task: TerraformTask@5
           displayName: init
           inputs:
