@@ -9,6 +9,14 @@ parameters:
     displayName: init run ?
     type: boolean
     default: false
+  - name: runvalidate
+    displayName: validate run ?
+    type: boolean
+    default: false
+  - name: runfmt
+    displayName: fmt run ?
+    type: boolean
+    default: false
 stages:
   - stage: Build
     displayName: Build infra
@@ -30,11 +38,14 @@ stages:
             backendAzureRmStorageAccountName: 'prah'
             backendAzureRmContainerName: 'prah1'
             backendAzureRmKey: 'prah.tfstate'
+      - ${{ if eq(parameters.runvalidate, true) }}:
+
         - task: TerraformTask@5
           displayName: validate
           inputs:
             provider: 'azurerm'
             command: 'validate'
+      - ${{ if eq(parameters.runfmt, true) }}:
         - task: TerraformTask@5
           displayName: formatting
           inputs:
