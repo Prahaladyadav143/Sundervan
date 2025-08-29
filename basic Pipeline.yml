@@ -30,24 +30,22 @@ stages:
           displayName: installer
           inputs:
             terraformVersion: 'latest'
-      - ${{ if eq(parameters.runinit, true) }}:
-        - task: TerraformTask@5
-          displayName: init
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            backendServiceArm: '$(envir)'
-            backendAzureRmStorageAccountName: 'prah'
-            backendAzureRmContainerName: 'prah1'
-            backendAzureRmKey: 'prah.tfstate'
-      - ${{ if eq(parameters.runvalidate, true) }}:
+        - ${{ if eq(parameters.runinit, true) }}:
+          - task: TerraformTask@5
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '$(envir)'
+              backendAzureRmStorageAccountName: 'prah'
+              backendAzureRmContainerName: 'prah1'
+              backendAzureRmKey: 'prah.tfstate'
 
         - task: TerraformTask@5
           displayName: validate
           inputs:
             provider: 'azurerm'
             command: 'validate'
-      - ${{ if eq(parameters.runfmt, true) }}:
         - task: TerraformTask@5
           displayName: formatting
           inputs:
