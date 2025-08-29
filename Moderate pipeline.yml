@@ -1,0 +1,83 @@
+name: Moderate pipeline
+trigger:
+ branches:
+   include:
+     - feature/*
+pool:
+ name: 21-aug
+variables:
+  envir: 'newservice1'
+parameters:
+- name: runinit
+  displayName: init run ?
+  type: boolean
+  default: false
+
+- name: runvalidate
+  displayName: validate run ?
+  type: boolean
+  default: false
+
+- name: runfmt
+  displayName: fmt run ?
+  type: boolean
+  default: false
+stages:
+  - stage: Build
+    displayName: Build infra
+    jobs:
+      - job: initvalidatejob
+        displayName: initwa validatwa job
+        steps:
+        - task: TerraformInstaller@1
+          displayName: installer
+          inputs:
+            terraformVersion: 'latest'
+        - ${{ if eq(parameters.runinit, true) }}:
+          - task: TerraformTask@5
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '$(envir)'
+              backendAzureRmStorageAccountName: 'prah'
+              backendAzureRmContainerName: 'prah1'
+              backendAzureRmKey: 'prah.tfstate'
+
+        - task: TerraformTask@5
+          displayName: validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+        - task: TerraformTask@5
+          displayName: formatting
+          inputs:
+            provider: 'azurerm'
+            command: 'custom'
+            outputTo: 'console'
+            customCommand: 'fmt'
+            environmentServiceNameAzureRM: '$(envir)'
+      - job: manulavalidation
+        displayName: manual validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'prahad.yadav@gmail.com'
+
+      - job: plan
+        displayName: planwa & Mnual validation
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: '$(envir)'
+            backendAzureRmStorageAccountName: 'prah'
+            backendAzureRmContainerName: 'prah1'
+            backendAzureRmKey: 'prah.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: '$(envir)'
