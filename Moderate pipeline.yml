@@ -2,7 +2,7 @@ name: Moderate pipeline
 trigger:
  branches:
    include:
-     - feature/*
+     - practice
 pool:
  name: 21-aug
 variables:
