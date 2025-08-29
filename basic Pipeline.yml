@@ -54,8 +54,16 @@ stages:
             outputTo: 'console'
             customCommand: 'fmt'
             environmentServiceNameAzureRM: '$(envir)'
+      - job: manulavalidation
+        displayName: manual validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'prahad.yadav@gmail.com'
+
       - job: plan
-        displayName: planwa
+        displayName: planwa & Mnual validation
         steps:
         - task: TerraformTask@5
           inputs:
