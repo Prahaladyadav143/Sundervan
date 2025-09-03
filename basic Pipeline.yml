@@ -54,18 +54,11 @@ stages:
             outputTo: 'console'
             customCommand: 'fmt'
             environmentServiceNameAzureRM: '$(envir)'
-      - job: manulavalidation
-        displayName: manual validation
-        pool: server
-        steps:
-        - task: ManualValidation@1
-          inputs:
-            notifyUsers: 'prahad.yadav@gmail.com'
-
-      - job: plan
-        displayName: planwa & Mnual validation
+      - job: initplan
+        displayName: planwa init
         steps:
         - task: TerraformTask@5
+          displayName: init job for plan
           inputs:
             provider: 'azurerm'
             command: 'init'
@@ -74,7 +67,15 @@ stages:
             backendAzureRmContainerName: 'prah1'
             backendAzureRmKey: 'prah.tfstate'
         - task: TerraformTask@5
+          displayName: plan
           inputs:
             provider: 'azurerm'
             command: 'plan'
             environmentServiceNameAzureRM: '$(envir)'
+      - job: manulavalidation
+        displayName: manual validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'prahad.yadav@gmail.com'
