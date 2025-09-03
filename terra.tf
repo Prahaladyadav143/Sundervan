@@ -18,15 +18,10 @@ resource "azurerm_resource_group" "madhuvan" {
 
   
 }
-resource "azurerm_resource_group" "madhuvan11" {
-  name     = "ramu-rg11"
-  location = "West Europe"
-
-  
-}
-resource "azurerm_resource_group" "madhuvan12" {
-  name     = "ramu-rg123"
-  location = "West Europe"
-
-  
+resource "azurerm_storage_account" "mystorage" {
+  name                = "storage12"
+  location            = "eastus"
+  account_tier        = "Standard"
+  account_replication_type = "LRS"
+  resource_group_name = "raaam"
 }
