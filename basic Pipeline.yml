@@ -102,8 +102,9 @@ stages:
             backendAzureRmContainerName: 'prah1'
             backendAzureRmKey: 'prah.tfstate'
         - task: TerraformTask@5
+          displayName: apply
           inputs:
             provider: 'azurerm'
             command: 'apply'
-            commandOptions: '-auto -approve'
+            commandOptions: '-auto-approve'
             environmentServiceNameAzureRM: 'newservice1'
