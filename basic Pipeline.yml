@@ -23,6 +23,10 @@ parameters:
   displayName: fmt run ?
   type: boolean
   default: false
+- name: runplan
+  displayName: plan run ?
+  type: boolean
+  default: false  
 stages:
   - stage: Build
     displayName: Build infra
@@ -41,23 +45,25 @@ stages:
               provider: 'azurerm'
               command: 'init'
               backendServiceArm: '$(envir)'
-              backendAzureRmStorageAccountName: 'prah'
-              backendAzureRmContainerName: 'prah1'
+              backendAzureRmStorageAccountName: 'naisuruat1'
+              backendAzureRmContainerName: 'prahaladyadav'
               backendAzureRmKey: 'prah.tfstate'
 
-        - task: TerraformTask@5
-          displayName: validate
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-        - task: TerraformTask@5
-          displayName: formatting
-          inputs:
-            provider: 'azurerm'
-            command: 'custom'
-            outputTo: 'console'
-            customCommand: 'fmt'
-            environmentServiceNameAzureRM: '$(envir)'
+        - ${{ if eq(parameters.runvalidate, true) }}:
+          - task: TerraformTask@5
+            displayName: validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+        - ${{ if eq(parameters.runfmt, true) }}:
+          - task: TerraformTask@5
+            displayName: formatting
+            inputs:
+              provider: 'azurerm'
+              command: 'custom'
+              outputTo: 'console'
+              customCommand: 'fmt'
+              environmentServiceNameAzureRM: '$(envir)'
       - job: initplan
         displayName: planwa init
         steps:
@@ -67,15 +73,16 @@ stages:
             provider: 'azurerm'
             command: 'init'
             backendServiceArm: '$(envir)'
-            backendAzureRmStorageAccountName: 'prah'
-            backendAzureRmContainerName: 'prah1'
+            backendAzureRmStorageAccountName: 'naisuruat1'
+            backendAzureRmContainerName: 'prahaladyadav'
             backendAzureRmKey: 'prah.tfstate'
-        - task: TerraformTask@5
-          displayName: plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            environmentServiceNameAzureRM: '$(envir)'
+        - ${{ if eq(parameters.runplan, true) }}:
+          - task: TerraformTask@5
+            displayName: plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: '$(envir)'
       - job: manulavalidation
         dependsOn: initplan
         displayName: manual validation
@@ -98,8 +105,8 @@ stages:
             provider: 'azurerm'
             command: 'init'
             backendServiceArm: '$(envir)'
-            backendAzureRmStorageAccountName: 'prah'
-            backendAzureRmContainerName: 'prah1'
+            backendAzureRmStorageAccountName: 'naisuruat1'
+            backendAzureRmContainerName: 'prahaladyadav'
             backendAzureRmKey: 'prah.tfstate'
         - task: TerraformTask@5
           displayName: apply
@@ -107,4 +114,4 @@ stages:
             provider: 'azurerm'
             command: 'apply'
             commandOptions: '-auto-approve'
-            environmentServiceNameAzureRM: 'newservice1'
+            environmentServiceNameAzureRM: $(envir)
