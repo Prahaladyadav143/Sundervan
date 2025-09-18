@@ -7,7 +7,7 @@ trigger:
 pool:
  name: 21-aug
 variables:
-  envir: 'newservice1'
+  envir: 'newservice'
 parameters:
 - name: runinit
   displayName: init run ?
